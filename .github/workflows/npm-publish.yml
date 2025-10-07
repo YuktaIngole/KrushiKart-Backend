@@ -1,0 +1,46 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x] # Test against multiple Node versions
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      # Optional: If you have a build step or linter, add it here
+      # - name: Run build
+      #   run: npm run build
+
+      # Optional: You can also check code formatting or linting here
+      # - name: Run ESLint
+      #   run: npx eslint .
+
+      # If you have tests, include them
+      # - name: Run tests
+      #   run: npm test
+
+      - name: Run development server (check if starts)
+        run: |
+          nohup npm run dev & 
+          sleep 5
+          curl -f http://localhost:3000 || echo "Server start check failed"
