@@ -84,7 +84,7 @@ router.put('/status/:id', auth, async (req, res) => {
         
         const isSellerInOrder = order.products.some(p => p.product.seller.toString() === sellerId.toString());
         if (!isSellerInOrder) {
-             return res.status(403).json({ msg: "Authorization denied. Order does not contain your products." });
+             return res.status(403).json({ msg: "Authorization denied. Order does not contain your product" });
         }
 
         order.status = status;
